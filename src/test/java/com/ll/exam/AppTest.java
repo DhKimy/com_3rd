@@ -17,8 +17,16 @@ public class AppTest {
 
     @Test
     public void ioc_articleController() {
-        ArticleController articleController = Con.getArticleController();
+        ArticleController articleController = Container.getArticleController();
 
         assertThat(new ArrayList<>()).isNotNull();
+    }
+
+    @Test
+    public void ioc__articleController__singleTon(){
+        ArticleController articleController1 = Container.getArticleController();
+        ArticleController articleController2 = Container.getArticleController();
+
+        assertThat(articleController2).isEqualTo(articleController1);
     }
 }
