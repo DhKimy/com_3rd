@@ -7,22 +7,23 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Container {
-    private static final ArticleController articleController;
-    private static final HomeController homeController;
+    private static Map<Class, Object> objects;
 
     static {
-        articleController = Ut.cls.newObj(ArticleController.class, null);
-        homeController = Ut.cls.newObj(HomeController.class, null);
-    }
-    public static ArticleController getArticleController() {
-        return articleController;
+        objects = new HashMap<>();
+        Reflections ref = new Reflections("com.ll.exam");
+        for (Class<?> cls : ref.getTypesAnnotatedWith(Controller.class)) {
+            objects.put(cls, Ut.cls.newObj(cls, null));
+        }
     }
 
-    public static HomeController getHomeController() {
-        return homeController;
+    public static <T> T getObj(Class<T> cls){
+        return (T) objects.get(cls);
     }
 
     public static List<String> getControllerNames() {
